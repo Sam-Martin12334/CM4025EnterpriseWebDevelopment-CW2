@@ -31,7 +31,9 @@
     "crypto": "^1.0.1",
     "express": "^4.17.3",
     "helmet": "^5.0.2",
+    "lodash": "^4.17.21",
     "mongodb": "^4.5.0",
+    "mongoose": "^6.2.10",
     "webpack": "^5.71.0",
     "webpack-cli": "^4.9.2",
     "webpack-node-externals": "^3.0.0"
