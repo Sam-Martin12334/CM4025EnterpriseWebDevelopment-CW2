@@ -1,0 +1,38 @@
+{
+  "name": "cm4025enterprisewebdevelopment-cw2",
+  "version": "1.0.0",
+  "description": "CW for CM4025",
+  "main": "index.js",
+  "scripts": {
+    "development": "nodemon",
+    "build": "webpack --config webpack.config.client.production.js && webpack --mode=production --config webpack.config.server.js",
+    "start": "NODE_ENV=production node ./dist/server.generated.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sam-Martin12334/CM4025EnterpriseWebDevelopment-CW2.git"
+  },
+  "author": "Sam Martin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sam-Martin12334/CM4025EnterpriseWebDevelopment-CW2/issues"
+  },
+  "homepage": "https://github.com/Sam-Martin12334/CM4025EnterpriseWebDevelopment-CW2#readme",
+  "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "babel-loader": "^8.2.4"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "helmet": "^5.0.2",
+    "webpack": "^5.71.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-node-externals": "^3.0.0"
+  }
+}
+
