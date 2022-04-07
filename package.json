@@ -21,9 +21,13 @@
   "devDependencies": {
     "@babel/core": "^7.17.8",
     "@babel/preset-env": "^7.16.11",
-    "babel-loader": "^8.2.4"
+    "@babel/preset-react": "^7.16.7",
+    "babel-loader": "^8.2.4",
+    "file-loader": "^6.2.0"
   },
   "dependencies": {
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
     "body-parser": "^1.20.0",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
@@ -36,8 +40,15 @@
     "lodash": "^4.17.21",
     "mongodb": "^4.5.0",
     "mongoose": "^6.2.10",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-hot-loader": "^4.13.0",
+    "react-router": "^6.3.0",
+    "react-router-dom": "^5.3.0",
     "webpack": "^5.71.0",
     "webpack-cli": "^4.9.2",
+    "webpack-dev-middleware": "^5.3.1",
+    "webpack-hot-middleware": "^2.25.1",
     "webpack-node-externals": "^3.0.0"
   }
 }
