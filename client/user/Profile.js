@@ -88,6 +88,8 @@ export default function Profile({ match }) {
             <ListItemText primary={"Joined: " + (
               new Date(user.created)).toDateString()}/>
           </ListItem>
+          <ListItem><ListItemText primary={"User Profile Clicks: " + user.profClicks}/></ListItem>
+          <ListItem><ListItemText primary={user.about}/></ListItem>
         </List>
       </Paper>
     )
