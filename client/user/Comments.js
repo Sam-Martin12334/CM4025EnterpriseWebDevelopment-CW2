@@ -49,12 +49,12 @@ const useStyles = makeStyles(theme => ({
 export default function Users({match}) {
   const classes = useStyles()
   const [users, setUsers] = useState([])
+  const [currentUser, setUser] = useState({})
   const [values, setValues] = useState({
-    comments : [],
+    newcomment : "",
     redirectToProfile: false
   })
   const jwt = auth.isAuthenticated()
-  console.log("Hello there")
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -68,21 +68,40 @@ export default function Users({match}) {
       }
     })
 
+    read({
+      userId: match.params.userId
+    }, {t: jwt.token}, signal).then((data) => {
+      if (data && data.error) {
+        setRedirectToSignin(true)
+      } else {
+        setUser(data)
+      }
+    })
+
     return function cleanup(){
       abortController.abort()
     }
-  }, [])
+  }, [match.params.userId])
 
   const clickSubmit = () => {
+    
+    var arr = Object.values(currentUser.comments);
+
+    arr.push(values.newcomment)
+  
+    console.log(arr)
     const user = {
       name: values.name || undefined,
       email: values.email || undefined,
       password: values.password || undefined,
       about: values.about || undefined,
-      comments: values.comments || undefined
+      comments: arr|| undefined
     }
+    
+
+    
+
     const jwt = auth.isAuthenticated()
-   console.log("Hello there")
     update({
       userId: match.params.userId
     }, {
@@ -98,6 +117,9 @@ export default function Users({match}) {
   const handleChange = name => event => {
     setValues({...values, [name]: event.target.value})
   }
+  if (values.redirectToProfile) {
+    return ( window.location.reload(false))
+  }
   
 
     return (
@@ -108,7 +130,7 @@ export default function Users({match}) {
           <Typography variant="h6" className={classes.title}>
               Add a new Comment
           </Typography>
-          <TextField id="newComment" label="Add Comment here!" className={classes.textField} onChange={handleChange('comments')} margin="normal"/>
+          <TextField id="newComment" label="Add Comment here!" className={classes.textField} onChange={handleChange('newcomment')} margin="normal"/>
           <br/> {
             values.error && (<Typography component="p" color="error">
               <Icon color="error" className={classes.error}>error</Icon>
