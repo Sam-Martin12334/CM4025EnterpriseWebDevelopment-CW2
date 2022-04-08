@@ -10,6 +10,7 @@ import Profile from './user/Profile'
 import EditProfile from './user/EditProfile'
 import UserAdmin from './user/UsersAdmin'
 import Comments from './user/Comments' //Route for comment.js
+import CommentsAdmin from './user/CommentsAdmin' //Route for comment.js
 const MainRouter = () => {
     return (<div>
       <Menu/>
@@ -19,6 +20,7 @@ const MainRouter = () => {
         <Route path="/signup" component={Signup}/>
         <Route path="/signin" component={Signin}/>
         <Route path="/comments/:userId" component={Comments}/>
+        <Route path="/commentsadmin/:userId" component={CommentsAdmin}/>
         <PrivateRoute path="/user/edit/:userId" component={EditProfile}/>
         <Route path="/user/:userId" component={Profile}/>
         <Route path="/useradmin/:userId" component={UserAdmin}/>

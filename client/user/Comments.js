@@ -25,8 +25,25 @@ const useStyles = makeStyles(theme => ({
     margin: `${theme.spacing(4)}px 0 ${theme.spacing(2)}px`,
     color: theme.palette.openTitle
   },
+  commentTitle: {
+    color: theme.palette.openTitle,
+    textAlign: 'left',
+    fontSize:'1.5em'
+  },
+  comment: {
+    color: theme.palette.openTitle,
+    textAlign: 'left',
+    fontSize:'1em'
+  },
   card: {
     maxWidth: 600,
+    margin: 'auto',
+    textAlign: 'center',
+    marginTop: theme.spacing(5),
+    paddingBottom: theme.spacing(2)
+  },
+  cardMain: {
+    maxWidth: 1200,
     margin: 'auto',
     textAlign: 'center',
     marginTop: theme.spacing(5),
@@ -127,8 +144,11 @@ export default function Users({match}) {
       <><Paper className={classes.root} elevation={4}>
         <Card className={classes.card}>
         <CardContent>
+          <Typography variant="h4" className={classes.title}>
+              Add a new Comment here {currentUser.name} !
+          </Typography>
           <Typography variant="h6" className={classes.title}>
-              Add a new Comment
+              Contribute to the community here
           </Typography>
           <TextField id="newComment" label="Add Comment here!" className={classes.textField} onChange={handleChange('newcomment')} margin="normal"/>
           <br/> {
@@ -142,22 +162,25 @@ export default function Users({match}) {
           <Button color="primary" variant="contained" onClick={clickSubmit} className={classes.submit}>Submit</Button>
         </CardActions>
       </Card>
-          
+      <Card className={classes.cardMain}>
+      <CardContent>    
         <Typography variant="h3" className={classes.title}>
-          The Comments
+          Comments from all of our users!
         </Typography>
 
         <List dense>
           {users.map((item) => {
-            return <><ListItemText primary={'The user ' + item.name + ' commented:'} /><List dense>
+            return <><ListItemText  classes = {{primary:classes.commentTitle}} primary={'The user ' + item.name + ' commented:'} /><List dense>
               {item.comments.map((comment) => {
-                return <ListItemText primary={comment} />
+                return <ListItemText primary={comment} classes = {{primary:classes.comment} }/>
               })}
               
             </List></>
           })}
 
         </List>
+       </CardContent>
+        </Card>
       </Paper>
       
       </>
