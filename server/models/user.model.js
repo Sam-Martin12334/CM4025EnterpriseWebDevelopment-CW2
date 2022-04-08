@@ -28,6 +28,8 @@ const UserSchema = new mongoose.Schema({
   	type: Boolean,
   	default: false
   },
+  comments: [{type: String}], //This is going to be an array to hold the comments the users have written
+  
   hashed_password: {
     type: String,
     required: "Password is required"
