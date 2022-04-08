@@ -98,13 +98,24 @@ export default function EditProfile({ match }) {
       return (<Redirect to={'/user/' + values.userId}/>)
     }
     return (
-      
-        <Card className={classes.card}>
+      <Card className={classes.card}>
         <CardContent>
           <Typography variant="h6" className={classes.title}>
-              Add a new Comment
+            Edit Profile
           </Typography>
-          <TextField id="newComment" label="Add Comment here!" className={classes.textField} onChange={handleChange('comments')} margin="normal"/>
+          <TextField id="name" label="Name" className={classes.textField} value={values.name} onChange={handleChange('name')} margin="normal"/><br/>
+          <TextField id="email" type="email" label="Email" className={classes.textField} value={values.email} onChange={handleChange('email')} margin="normal"/><br/>
+          <TextField id="password" type="password" label="Password" className={classes.textField} value={values.password} onChange={handleChange('password')} margin="normal"/>
+          <TextField
+                      id="multiline-flexible"
+                      label="About"
+                      multiline
+                      rows="2"
+                      value={values.about}
+                      onChange={handleChange('about')}
+                      className={classes.textField}
+                      margin="normal"
+                    />
           <br/> {
             values.error && (<Typography component="p" color="error">
               <Icon color="error" className={classes.error}>error</Icon>

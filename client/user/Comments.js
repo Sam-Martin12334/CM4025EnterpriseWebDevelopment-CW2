@@ -4,6 +4,8 @@ import Paper from '@material-ui/core/Paper'
 import List from '@material-ui/core/List'
 import ListItemText from '@material-ui/core/ListItemText'
 import Typography from '@material-ui/core/Typography'
+import {list} from './api-user.js'
+
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -11,7 +13,7 @@ import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import Icon from '@material-ui/core/Icon'
 import auth from './../auth/auth-helper'
-import {read, update, list} from './api-user.js'
+import {read, update} from './api-user.js'
 import {Redirect} from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
@@ -53,7 +55,6 @@ export default function Users({match}) {
   })
   const jwt = auth.isAuthenticated()
   console.log("Hello there")
-  console.log(match.params.userId)
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -66,20 +67,11 @@ export default function Users({match}) {
         setUsers(data)
       }
     })
-    read({
-      userId: match.params.userId
-    }, {t: jwt.token}, signal).then((data) => {
-      if (data && data.error) {
-        setValues({...values, error: data.error})
-      } else {
-        setValues({...values, name: data.name, email: data.email, about: data.about})
-      }
-    })
 
     return function cleanup(){
       abortController.abort()
     }
-  }, [match.params.userId])
+  }, [])
 
   const clickSubmit = () => {
     const user = {
@@ -91,10 +83,8 @@ export default function Users({match}) {
     }
     const jwt = auth.isAuthenticated()
    console.log("Hello there")
-   
     update({
       userId: match.params.userId
-      
     }, {
       t: jwt.token
     }, user).then((data) => {
@@ -108,10 +98,7 @@ export default function Users({match}) {
   const handleChange = name => event => {
     setValues({...values, [name]: event.target.value})
   }
-
-  if (values.redirectToProfile) {
-    return (<Redirect to={'/user/' + values.userId}/>)
-  }
+  
 
     return (
 
