@@ -96,6 +96,23 @@ const update = async (params, credentials, user) => {
   }
 }
 
+const updateadmin = async (params, credentials, user) => {
+  try {
+    let response = await fetch('/api/users/admin/' + params.userId, {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + credentials.t
+      },
+      body: JSON.stringify(user)
+    })
+    return await response.json()
+  } catch(err) {
+    console.log(err)
+  }
+}
+
 const remove = async (params, credentials) => {
   try {
     let response = await fetch('/api/users/' + params.userId, {
@@ -117,6 +134,7 @@ export {
   list,
   listadmin,
   listComments,
+  updateadmin,
   read,
   update,
   remove

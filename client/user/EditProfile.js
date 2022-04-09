@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import auth from './../auth/auth-helper'
 import {read, update} from './api-user.js'
 import {Redirect} from 'react-router-dom'
+import DeleteComments from './DeleteComments'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -38,7 +39,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function EditProfile({ match }) {
-  const classes = useStyles()
   const [values, setValues] = useState({
     name: '',
     password: '',
@@ -48,8 +48,11 @@ export default function EditProfile({ match }) {
     error: '',
     redirectToProfile: false
   })
-  const jwt = auth.isAuthenticated()
-  console.log("Hello there")
+
+    const classes = useStyles()
+    const [user, setUser] = useState({})
+    const jwt = auth.isAuthenticated()
+    console.log("Hello there")
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -64,13 +67,23 @@ export default function EditProfile({ match }) {
         setValues({...values, name: data.name, email: data.email, about: data.about})
       }
     })
-    return function cleanup(){
-      abortController.abort()
+
+  read({
+    userId: match.params.userId
+  }, {t: jwt.token}, signal).then((data) => {
+    if (data && data.error) {
+      setRedirectToSignin(true)
+    } else {
+      setUser(data)
     }
+  })
+  return function cleanup(){
+    abortController.abort()
+  }
 
   }, [match.params.userId])
 
-  console.log(match.params.userId)
+    console.log(match.params.userId)
   const clickSubmit = () => {
     const user = {
       name: values.name || undefined,
@@ -98,19 +111,34 @@ export default function EditProfile({ match }) {
       return (<Redirect to={'/user/' + values.userId}/>)
     }
     return (
-      
-        <Card className={classes.card}>
+      <Card className={classes.card}>
         <CardContent>
           <Typography variant="h6" className={classes.title}>
-              Add a new Comment
+            Edit Profile
           </Typography>
-          <TextField id="newComment" label="Add Comment here!" className={classes.textField} onChange={handleChange('comments')} margin="normal"/>
+          <TextField id="name" label="Name" className={classes.textField} value={values.name} onChange={handleChange('name')} margin="normal"/><br/>
+          <TextField id="email" type="email" label="Email" className={classes.textField} value={values.email} onChange={handleChange('email')} margin="normal"/><br/>
+          <TextField id="password" type="password" label="Password" className={classes.textField} value={values.password} onChange={handleChange('password')} margin="normal"/>
+          <TextField
+                      id="multiline-flexible"
+                      label="About"
+                      multiline
+                      rows="2"
+                      value={values.about}
+                      onChange={handleChange('about')}
+                      className={classes.textField}
+                      margin="normal"
+                    />
           <br/> {
             values.error && (<Typography component="p" color="error">
               <Icon color="error" className={classes.error}>error</Icon>
               {values.error}
             </Typography>)
           }
+          <Typography className={classes.title}>
+            Delete your comments here
+          </Typography>
+        <DeleteComments userId={user._id}/>
         </CardContent>
         <CardActions>
           <Button color="primary" variant="contained" onClick={clickSubmit} className={classes.submit}>Submit</Button>

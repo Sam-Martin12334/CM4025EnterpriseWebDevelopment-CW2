@@ -13,6 +13,7 @@ import Edit from '@material-ui/icons/Edit'
 import Person from '@material-ui/icons/Person'
 import Divider from '@material-ui/core/Divider'
 import DeleteUser from './DeleteUser'
+
 import auth from './../auth/auth-helper'
 import {read} from './api-user.js'
 import {Redirect, Link} from 'react-router-dom'
@@ -80,6 +81,7 @@ export default function Profile({ match }) {
                   </IconButton>
                 </Link>
                 <DeleteUser userId={user._id}/>
+                
               </ListItemSecondaryAction>)
             }
           </ListItem>

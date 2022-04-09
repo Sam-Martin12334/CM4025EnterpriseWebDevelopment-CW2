@@ -108,10 +108,10 @@ export default function Users({match}) {
   
     console.log(arr)
     const user = {
-      name: values.name || undefined,
-      email: values.email || undefined,
-      password: values.password || undefined,
-      about: values.about || undefined,
+      name: currentUser.name || undefined,
+      email: currentUser.email || undefined,
+      password: currentUser.password || undefined,
+      about: currentUser.about || undefined,
       comments: arr|| undefined
     }
     
