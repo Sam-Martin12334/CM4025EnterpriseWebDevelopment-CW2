@@ -45,7 +45,6 @@ const createEvents = async (event) => {
   
   const updateEvents = async (params, credentials, event) => {
     try {
-      console.log(event)
       let response = await fetch('/api/events/' + params.eventId, {
         method: 'PUT',
         headers: {

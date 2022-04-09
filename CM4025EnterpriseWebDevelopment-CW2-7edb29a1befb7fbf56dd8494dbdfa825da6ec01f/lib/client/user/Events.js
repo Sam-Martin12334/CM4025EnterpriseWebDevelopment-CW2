@@ -12,7 +12,6 @@ import auth from './../auth/auth-helper'
 import {read} from './api-user.js'
 import {createEvents, listEvents, updateEvents} from './api-events.js'
 import TextField from '@material-ui/core/TextField'
-import e from 'express'
 
 
 
@@ -94,6 +93,7 @@ export default function Event({match}) {
             if (data && data.error) {
                 console.log(data.error)
             } else {
+                console.log(data)
                 setEventData(data)
             }
         })
@@ -105,7 +105,14 @@ export default function Event({match}) {
   const clickSubmit = () => {
     const event = {
         title: "New Event" || undefined,
-        peopleGoing: [] || undefined,
+        peopleGoing: [{ 
+            name: "me" || undefined,
+            userId: user._id || undefined
+            }, {
+            name: "you" || undefined,
+            userId: user._id || undefined
+            }
+        ] || undefined,
         description: "A brand new event" || undefined
     }
 
@@ -127,75 +134,22 @@ export default function Event({match}) {
 
     
   }
-  const removeEvent = (currentEvent, userId) => () => {
-
-    let userArr = Array.from(currentEvent.peopleGoing);
-
-    console.log(userArr)
-
-    console.log("before: " +  userArr)
-    for(var i = 0; i < userArr.length; i++){
-      console.log(userId, userArr[i].userId)
-      if(userId == userArr[i].userId){
-        userArr.splice(i, 1);
-        i--
-      }
-    }
-
-    console.log("after: " +  userArr)
-
-    const event = {
-      title: currentEvent.title || undefined,
-      peopleGoing: userArr || undefined,
-      description: currentEvent.description|| undefined
-    }
-    
+  const removeEvent = () => {
     updateEvents({
-        eventId: currentEvent._id
+        userId: props.userId
       }, {
         t: jwt.token
-      }, event).then((data) => {
+      }, user).then((data) => {
         if (data && data.error) {
           setValues({...values, error: data.error})
+          setRedirect(true)
         } else {
-          setValues({...values, eventId: currentEvent._id})
+          setValues({...values, userId: props.userId})
+          console.log(props.userId);
+          setRedirect(true)
         }
       })
-
-      
-    }
-    const addEvent = (currentEvent) =>() => {
-
-      let userArr = Array.from(currentEvent.peopleGoing);
-  
-      console.log(userArr)
-  
-      userArr.push({name: user.name, userId:user._id})
-  
-      console.log("after: " +  userArr)
-  
-      const event = {
-        title: currentEvent.title || undefined,
-        peopleGoing: userArr || undefined,
-        description: currentEvent.description|| undefined
-      }
-      
-      updateEvents({
-          eventId: currentEvent._id
-        }, {
-          t: jwt.token
-        }, event).then((data) => {
-          if (data && data.error) {
-            setValues({...values, error: data.error})
-          } else {
-            setValues({...values, eventId: currentEvent._id})
-          }
-        })
-
-      
 }
-
-
   let eventArr = Array.from(eventList);
 
   
@@ -215,58 +169,32 @@ export default function Event({match}) {
     </Card>
    
       <List dense>
-      <Card className={classes.cardMain}>
-      
       {eventArr.map((item) => {
-            if(item.peopleGoing.length == 0) {
-              return <CardContent>
-              <Typography variant="h3" className={classes.title}>
-                  {item.title}
-              </Typography>
-              <Typography  className = {classes.commentTitle}> Description of event: </Typography>
-              <Typography  className = {classes.comment}> {item.description} </Typography>
-              <Typography  className = {classes.commentTitle}> {'The amount of people going to this event is: ' + item.peopleGoing.length} </Typography>
-            
-              
-              <Typography className = {{primary:classes.commentTitle}} primary={'Would you like to go to this event?'} />
-              <CardActions>
-                   <Button color="primary" variant="contained" onClick={addEvent(item)} className={classes.submit}>Say you are going to this event</Button>
-            </CardActions>
-            </CardContent>
-              
-            } else {
-              return <CardContent>
-              <Typography variant="h3" className={classes.title}>
-                  {item.title}
-              </Typography>
-              <Typography  className = {classes.commentTitle}> Description of event: </Typography>
-              <Typography  className = {classes.comment}> {item.description} </Typography>
-              <Typography  className = {classes.commentTitle}> {'The amount of people going to this event is: ' + item.peopleGoing.length} </Typography>
-              {item.peopleGoing.map((item2) => { 
+            return <> <Card className={classes.cardMain}>
+            <CardContent>
+            <Typography variant="h3" className={classes.title}>
+                {item.title}
+            </Typography>
+            {item.peopleGoing.map((item2) => {
                 var id1 = item2.userId
                 var id2 = match.params.userId
-                console.log("hello")
                 if(id1 === id2) {
-                  return <><Typography className = {classes.commentTitle} > You are going to this event! </Typography>
-                  <CardActions>
-                       <Button color="primary" variant="contained" onClick={removeEvent(item, id1)} className={classes.submit}>Remove from event</Button>
+                    console.log("yes")
+                    return <><Typography classes = {classes.commentTitle} > You are going to this event! </Typography>
+                    <CardActions>
+                         <Button color="primary" variant="contained" onClick={removeEvent} className={classes.submit}>Remove from event</Button>
                 </CardActions></>
                 } else {
-                  return <><Typography className = {{primary:classes.commentTitle}} primary={'Would you like to go to this event?'} />
-                    <CardActions>
-                   <Button color="primary" variant="contained" onClick={addEvent(item)} className={classes.submit}>Say you are going to this event</Button>
-                    </CardActions></>
+                    return <Typography classes = {{primary:classes.commentTitle}} primary={'Would you like to go to this event?'} />
+                    
                 }
-              })}
-              </CardContent>
-              
-
-            }
-            
+            })}
+            <Typography  classes = {classes.commentTitle}> Description of event: </Typography>
+            <Typography  classes = {classes.comment}> {item.description} </Typography>
+            <Typography  classes = {classes.commentTitle}> {'The amount of people going to this event is: ' + item.peopleGoing.length} </Typography>
+            </CardContent>
+        </Card></>
           })}
-          
-          
-          </Card>
         </List>
         
         
@@ -276,3 +204,7 @@ export default function Event({match}) {
       </>
     )
 }
+
+/*
+
+          */

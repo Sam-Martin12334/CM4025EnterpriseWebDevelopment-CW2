@@ -35,7 +35,6 @@ const readEvents = (req, res) => {
 
 const updateEvents = async (req, res) => {
   try {
-    console.log("here")
     let event = req.profile
     event = extend(event, req.body)
     await event.save()

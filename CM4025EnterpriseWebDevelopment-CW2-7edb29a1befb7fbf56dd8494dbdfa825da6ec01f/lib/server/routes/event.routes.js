@@ -9,9 +9,9 @@ router.route('/api/events')
   .post(eventCtrl.createEvents)
 
 router.route('/api/events/:eventId')
-  .get(eventCtrl.readEvents)
-  .put(eventCtrl.updateEvents)
-  .delete(eventCtrl.removeEvents)
+  .get(authCtrl.hasAuthorization, eventCtrl.readEvents)
+  .put(authCtrl.hasAuthorization, eventCtrl.updateEvents)
+  .delete(authCtrl.hasAuthorization, eventCtrl.removeEvents)
 
 router.param('eventId', eventCtrl.eventByID)
 
