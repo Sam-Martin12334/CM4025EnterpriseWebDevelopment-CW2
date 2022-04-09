@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "development": "nodemon",
-    "build": "webpack --config webpack.config.client.production.js && webpack --mode=production --config webpack.config.server.js",
-    "start": "MONGODB_URI=mongodb+srv://admin:password1234@cluster0.wg0en.mongodb.net/users?retryWrites=true&w=majority  NODE_ENV=production  node ./dist/server.generated.js"
+    "build": "webpack --config webpack.config.client.production.js && webpack --mode=production --config webpack.config.server.js MONGODB_URI=mongodb+srv://admin:password1234@cluster0.wg0en.mongodb.net/users?retryWrites=true&w=majority",
+    "start": "NODE_ENV=production node ./dist/server.generated.js"
   },
   "repository": {
     "type": "git",
