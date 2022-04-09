@@ -29,7 +29,7 @@ const list = async (req, res) => {
 
 const listadmin = async (req, res) => {
   try {
-    let users = await User.find().select('name email about updated created admin')
+    let users = await User.find().select('name email about updated created comments admin')
     res.json(users)
   } catch (err) {
     return res.status(400).json({
@@ -78,6 +78,24 @@ const update = async (req, res) => {
   }
 }
 
+const updateadmin = async (req, res, id) => {
+  try {
+    let user = req.profile
+    
+    user = extend(user, req.body)
+    user.updated = Date.now()
+    user.profileclicks = user.profileclicks + 1
+    await user.save()
+    user.hashed_password = undefined
+    user.salt = undefined
+    res.json(user)
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err)
+    })
+  }
+}
+
 
 const remove = async (req, res) => {
   try {
@@ -100,6 +118,7 @@ export default {
   read,
   list,
   listadmin,
+  updateadmin,
   remove,
   update
 }
