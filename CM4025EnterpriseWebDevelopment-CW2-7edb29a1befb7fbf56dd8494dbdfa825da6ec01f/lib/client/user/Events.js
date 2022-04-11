@@ -72,6 +72,8 @@ export default function Event({match}) {
         peopleGoing: [],
 
       })
+
+
     
   
     useEffect(() => {
@@ -93,7 +95,6 @@ export default function Event({match}) {
             if (data && data.error) {
                 console.log(data.error)
             } else {
-                console.log(data)
                 setEventData(data)
             }
         })
@@ -105,14 +106,7 @@ export default function Event({match}) {
   const clickSubmit = () => {
     const event = {
         title: "New Event" || undefined,
-        peopleGoing: [{ 
-            name: "me" || undefined,
-            userId: user._id || undefined
-            }, {
-            name: "you" || undefined,
-            userId: user._id || undefined
-            }
-        ] || undefined,
+        peopleGoing: [] || undefined,
         description: "A brand new event" || undefined
     }
 
@@ -134,22 +128,76 @@ export default function Event({match}) {
 
     
   }
-  const removeEvent = () => {
+  const removeEvent = (currentEvent, userId) => () => {
+
+    let userArr = Array.from(currentEvent.peopleGoing);
+
+    console.log(userArr)
+
+    console.log("before: " +  userArr)
+    for(var i = 0; i < userArr.length; i++){
+      console.log(userId, userArr[i].userId)
+      if(userId == userArr[i].userId){
+        userArr.splice(i, 1);
+        i--
+      }
+    }
+
+    console.log("after: " +  userArr)
+
+    const event = {
+      title: currentEvent.title || undefined,
+      peopleGoing: userArr || undefined,
+      description: currentEvent.description|| undefined
+    }
+    
     updateEvents({
-        userId: props.userId
+        eventId: currentEvent._id
       }, {
         t: jwt.token
-      }, user).then((data) => {
+      }, event).then((data) => {
         if (data && data.error) {
           setValues({...values, error: data.error})
-          setRedirect(true)
         } else {
-          setValues({...values, userId: props.userId})
-          console.log(props.userId);
-          setRedirect(true)
+          setValues({...values, eventId: currentEvent._id})
         }
       })
+
+      
+    }
+    const addEvent = (currentEvent) =>() => {
+      
+
+      let userArr = Array.from(currentEvent.peopleGoing);
+  
+      console.log(userArr)
+  
+      userArr.push({name: user.name, userId:user._id})
+  
+      console.log("after: " +  userArr)
+  
+      const event = {
+        title: currentEvent.title || undefined,
+        peopleGoing: userArr || undefined,
+        description: currentEvent.description|| undefined
+      }
+      
+      updateEvents({
+          eventId: currentEvent._id
+        }, {
+          t: jwt.token
+        }, event).then((data) => {
+          if (data && data.error) {
+            setValues({...values, error: data.error})
+          } else {
+            setValues({...values, eventId: currentEvent._id})
+          }
+        })
+
+      
 }
+
+
   let eventArr = Array.from(eventList);
 
   
@@ -169,32 +217,73 @@ export default function Event({match}) {
     </Card>
    
       <List dense>
-      {eventArr.map((item) => {
-            return <> <Card className={classes.cardMain}>
-            <CardContent>
-            <Typography variant="h3" className={classes.title}>
-                {item.title}
-            </Typography>
-            {item.peopleGoing.map((item2) => {
-                var id1 = item2.userId
-                var id2 = match.params.userId
-                if(id1 === id2) {
-                    console.log("yes")
-                    return <><Typography classes = {classes.commentTitle} > You are going to this event! </Typography>
-                    <CardActions>
-                         <Button color="primary" variant="contained" onClick={removeEvent} className={classes.submit}>Remove from event</Button>
-                </CardActions></>
-                } else {
-                    return <Typography classes = {{primary:classes.commentTitle}} primary={'Would you like to go to this event?'} />
-                    
-                }
-            })}
-            <Typography  classes = {classes.commentTitle}> Description of event: </Typography>
-            <Typography  classes = {classes.comment}> {item.description} </Typography>
-            <Typography  classes = {classes.commentTitle}> {'The amount of people going to this event is: ' + item.peopleGoing.length} </Typography>
+      
+      
+      {eventArr.map((item) => { item.peopleGoing
+        
+            let peopleArr = Array.from(item.peopleGoing)
+
+            console.log(peopleArr)
+            if(item.peopleGoing.length == 0) {
+              return <Card className={classes.cardMain}>
+              <CardContent>
+              <Typography variant="h3" className={classes.title}>
+                  {item.title}
+              </Typography>
+              <Typography  className = {classes.commentTitle}> Description of event: </Typography>
+              <Typography  className = {classes.comment}> {item.description} </Typography>
+              <Typography  className = {classes.commentTitle}> {'The amount of people going to this event is: ' + item.peopleGoing.length} </Typography>
+            
+              
+              <Typography className = {{primary:classes.commentTitle}}>Would you like to go to this event?</Typography>
+              <CardActions>
+                   <Button color="primary" variant="contained" onClick={addEvent(item)} className={classes.submit}>Say you are going to this event</Button>
+            </CardActions>
             </CardContent>
-        </Card></>
-          })}
+            </Card>
+              
+            } else {
+
+              for(var i = 0; i < peopleArr.length; i++){
+                console.log(i)
+                if(peopleArr[i].userId == match.params.userId) {
+                  return <Card className={classes.cardMain}>
+                  <CardContent>
+                  <Typography variant="h3" className={classes.title}>
+                      {item.title}
+                  </Typography>
+                  <Typography  className = {classes.commentTitle}> Description of event: </Typography>
+                  <Typography  className = {classes.comment}> {item.description} </Typography>
+                  <Typography  className = {classes.commentTitle}> {'The amount of people going to this event is: ' + item.peopleGoing.length} </Typography>
+                  <Typography className = {classes.commentTitle} > You are going to this event! Change this here: </Typography>
+                    <CardActions>
+                         <Button color="primary" variant="contained" onClick={removeEvent(item, match.params.userId)} className={classes.submit}>Remove from event</Button>
+                  </CardActions></CardContent>
+                  </Card>
+                } 
+              }
+
+                return <Card className={classes.cardMain}> 
+                    <CardContent>
+                    <Typography variant="h3" className={classes.title}>
+                        {item.title}
+                    </Typography><Typography  className = {classes.commentTitle}> Description of event: </Typography>
+                    <Typography  className = {classes.comment}> {item.description} </Typography>
+                    <Typography  className = {classes.commentTitle}> {'The amount of people going to this event is: ' + item.peopleGoing.length} </Typography>
+                    <Typography className = {{primary:classes.commentTitle}} >Would you like to go to this event?</Typography>
+                      <CardActions>
+                        <Button color="primary" variant="contained" onClick={addEvent(item)} className={classes.submit}>Say you are going to this event</Button>
+                      </CardActions>      
+                    </CardContent>
+                    </Card>
+            }
+       
+            
+       })}
+       
+          
+          
+         
         </List>
         
         
@@ -204,7 +293,3 @@ export default function Event({match}) {
       </>
     )
 }
-
-/*
-
-          */
