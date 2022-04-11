@@ -152,6 +152,9 @@ export default function Users({match}) {
           <Typography variant="h6" className={classes.title}>
               Contribute to the community here
           </Typography>
+          <Typography variant="h8" className={classes.title}>
+              To delete your comments, please go to the edit profile section of the my profile page
+          </Typography>
           <TextField id="newComment" label="Add Comment here!" className={classes.textField} onChange={handleChange('newcomment')} margin="normal"/>
           <br/> {
             values.error && (<Typography component="p" color="error">
