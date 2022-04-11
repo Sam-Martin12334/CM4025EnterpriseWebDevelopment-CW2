@@ -126,12 +126,12 @@ export default function Users({match}) {
     }, user).then((data) => {
       if (data && data.error) {
         setValues({...values, error: data.error})
-        //setRedirect(true)
+        setRedirect(true)
       } else {
         console.log(user.comments)
         setValues({...values, userId: deletedUserId})
         console.log(deletedUserId);
-        //setRedirect(true)
+        setRedirect(true)
       }
     })
 
