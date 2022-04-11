@@ -6,11 +6,12 @@ import ListItem from '@material-ui/core/ListItem'
 
 import ListItemText from '@material-ui/core/ListItemText'
 import Typography from '@material-ui/core/Typography'
-import DeleteComments from './DeleteComments'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
+import CardActions from '@material-ui/core/CardActions'
+import Button from '@material-ui/core/Button'
 import auth from './../auth/auth-helper'
-import {read, listadmin,update} from './api-user.js'
+import {read, listadmin, updateadmin} from './api-user.js'
 import {Redirect } from 'react-router-dom'
 
 
@@ -67,6 +68,9 @@ export default function Users({match}) {
     const [user, setUser] = useState({})
     const [redirectToSignin, setRedirectToSignin] = useState(false) 
     const jwt = auth.isAuthenticated()
+    const [values, setValues] = useState({
+      comments : []
+    })
     
   
     useEffect(() => {
@@ -99,10 +103,38 @@ export default function Users({match}) {
       abortController.abort()
     }
   }, [match.params.userId])
-  console.log(users)
 
   if (redirectToSignin) {
     return <Redirect to='/signin'/>
+  }
+
+  const deleteComments = (deletedUserId) => () => { 
+    
+    const user = {
+      name: values.name || undefined,
+      email: values.email || undefined,
+      password: values.password || undefined,
+      about: values.about || undefined,
+      comments: values.comments|| undefined
+    }
+
+    console.log(deletedUserId)
+    updateadmin({
+      userId: deletedUserId
+    }, {
+      t: jwt.token
+    }, user).then((data) => {
+      if (data && data.error) {
+        setValues({...values, error: data.error})
+        //setRedirect(true)
+      } else {
+        console.log(user.comments)
+        setValues({...values, userId: deletedUserId})
+        console.log(deletedUserId);
+        //setRedirect(true)
+      }
+    })
+
   }
 
     return (
@@ -120,7 +152,9 @@ export default function Users({match}) {
               {item.comments.map((comment) => {
                 return <ListItemText primary={comment} classes = {{primary:classes.comment} }/>
               })}
-              <DeleteComments userId={item._id}/>
+              <CardActions>
+                <Button color="primary" variant="contained" onClick={deleteComments(item._id)} className={classes.submit}>{'Delete ' + item.name + '`s comments'}</Button>
+             </CardActions>
             </List></>
           })}
 

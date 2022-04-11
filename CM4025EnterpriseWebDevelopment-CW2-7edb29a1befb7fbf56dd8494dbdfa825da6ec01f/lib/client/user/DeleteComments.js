@@ -48,11 +48,12 @@ export default function DeleteUser(props) {
     }, user).then((data) => {
       if (data && data.error) {
         setValues({...values, error: data.error})
-        setRedirect(true)
+        //setRedirect(true)
       } else {
+        console.log(user.comments)
         setValues({...values, userId: props.userId})
         console.log(props.userId);
-        setRedirect(true)
+        //setRedirect(true)
       }
     })
 
