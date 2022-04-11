@@ -163,7 +163,7 @@ export default function Event({match}) {
         }
       })
 
-      
+      window.location.reload(false);
     }
     const addEvent = (currentEvent) =>() => {
       
@@ -194,7 +194,7 @@ export default function Event({match}) {
           }
         })
 
-      
+        window.location.reload(false);
 }
 
 
