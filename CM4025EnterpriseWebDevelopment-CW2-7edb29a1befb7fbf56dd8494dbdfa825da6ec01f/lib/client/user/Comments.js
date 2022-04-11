@@ -100,6 +100,8 @@ export default function Users({match}) {
     }
   }, [match.params.userId])
 
+ 
+
   const clickSubmit = () => {
     
     var arr = Object.values(currentUser.comments);
