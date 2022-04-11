@@ -208,11 +208,11 @@ export default function Event({match}) {
       <Card className={classes.cardMain}>
       <CardContent>    
         <Typography variant="h3" className={classes.title}>
-          Comments from all of our users!
+          This page will display all the events currently being run by our service!
         </Typography>
-        <CardActions>
-          <Button color="primary" variant="contained" onClick={clickSubmit} className={classes.submit}>Submit</Button>
-        </CardActions>
+        <Typography variant="h5" className={classes.title}>
+          You can sign up to any event you would like!
+        </Typography>
        </CardContent>
     </Card>
    

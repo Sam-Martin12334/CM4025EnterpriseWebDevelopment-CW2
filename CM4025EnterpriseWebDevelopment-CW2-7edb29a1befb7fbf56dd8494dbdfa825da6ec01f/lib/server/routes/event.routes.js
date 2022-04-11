@@ -13,6 +13,9 @@ router.route('/api/events/:eventId')
   .put(eventCtrl.updateEvents)
   .delete(eventCtrl.removeEvents)
 
+  router.route('/api/events/admin/:eventId')
+  .put(authCtrl.hasAdminAuthorization, eventCtrl.updateAdminEvents)
+
 router.param('eventId', eventCtrl.eventByID)
 
 

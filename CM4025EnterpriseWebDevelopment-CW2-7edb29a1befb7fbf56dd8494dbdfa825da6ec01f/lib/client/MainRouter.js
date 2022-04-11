@@ -25,6 +25,7 @@ const MainRouter = () => {
         <Route path="/comments/:userId" component={Comments}/>
         <Route path="/commentsadmin/:userId" component={CommentsAdmin}/>
         <Route path="/event/:userId" component={Events}/>
+        <Route path="/eventadmin/:userId" component={EventsAdmin}/>
         <PrivateRoute path="/user/edit/:userId" component={EditProfile}/>
         <Route path="/user/:userId" component={Profile}/>
         <Route path="/useradmin/:userId" component={UserAdmin}/>

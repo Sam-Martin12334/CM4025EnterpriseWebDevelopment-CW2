@@ -47,6 +47,20 @@ const updateEvents = async (req, res) => {
   }
 }
 
+const updateAdminEvents = async (req, res) => {
+  try {
+    console.log("here")
+    let event = req.profile
+    event = extend(event, req.body)
+    await event.save()
+    res.json(event)
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err)
+    })
+  }
+}
+
 const removeEvents = async (req, res) => {
   try {
     let event = req.profile
@@ -83,5 +97,6 @@ export default {
   listEvents,
   removeEvents,
   updateEvents,
+  updateAdminEvents,
   eventByID
 }

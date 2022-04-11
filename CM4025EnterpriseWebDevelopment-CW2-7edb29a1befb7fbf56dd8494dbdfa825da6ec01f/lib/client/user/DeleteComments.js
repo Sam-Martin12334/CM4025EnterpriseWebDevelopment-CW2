@@ -62,7 +62,7 @@ export default function DeleteUser(props) {
   }
 
   if (redirect) {
-    return <Redirect to="/"/>
+    window.location.reload(false);
   }
     return (<span>
       <IconButton aria-label="Delete" onClick={clickButton} color="secondary">

@@ -7,6 +7,7 @@ const router = express.Router()
 router.route('/api/users/admin/:userId')
   .get(authCtrl.requireSignin, authCtrl.hasAdminAuthorization, userCtrl.listadmin)
   .put(authCtrl.requireSignin, authCtrl.hasAdminAuthorization, userCtrl.updateadmin)
+  .get(authCtrl.requireSignin, authCtrl.hasAdminAuthorization, userCtrl.readadmin)
 
 router.route('/api/users')
   .get(userCtrl.list)

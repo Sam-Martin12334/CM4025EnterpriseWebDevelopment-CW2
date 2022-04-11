@@ -60,6 +60,24 @@ const createEvents = async (event) => {
       console.log(err)
     }
   }
+
+  const updateAdminEvents = async (params, credentials, event) => {
+    try {
+      console.log(event)
+      let response = await fetch('/api/events/' + params.eventId, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + credentials.t
+        },
+        body: JSON.stringify(event)
+      })
+      return await response.json()
+    } catch(err) {
+      console.log(err)
+    }
+  }
   
   const removeEvents = async (params, credentials) => {
     try {
@@ -83,5 +101,6 @@ const createEvents = async (event) => {
     listEvents,
     readEvents,
     updateEvents,
+    updateAdminEvents,
     removeEvents
   }

@@ -60,6 +60,12 @@ const read = (req, res) => {
   return res.json(req.profile)
 }
 
+const readadmin = (req, res) => {
+  req.profile.hashed_password = undefined
+  req.profile.salt = undefined
+  return res.json(req.profile)
+}
+
 
 const update = async (req, res) => {
   try {
@@ -116,6 +122,7 @@ export default {
   create,
   userByID,
   read,
+  readadmin, 
   list,
   listadmin,
   updateadmin,

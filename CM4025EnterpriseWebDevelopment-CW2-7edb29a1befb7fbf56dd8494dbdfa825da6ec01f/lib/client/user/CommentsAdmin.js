@@ -11,7 +11,7 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import auth from './../auth/auth-helper'
 import {read, listadmin,update} from './api-user.js'
-
+import {Redirect } from 'react-router-dom'
 
 
 const useStyles = makeStyles(theme => ({
@@ -65,6 +65,7 @@ export default function Users({match}) {
     const classes = useStyles()
     const [users, setUsers] = useState([])
     const [user, setUser] = useState({})
+    const [redirectToSignin, setRedirectToSignin] = useState(false) 
     const jwt = auth.isAuthenticated()
     
   
@@ -99,6 +100,11 @@ export default function Users({match}) {
     }
   }, [match.params.userId])
   console.log(users)
+
+  if (redirectToSignin) {
+    return <Redirect to='/signin'/>
+  }
+
     return (
 
       <><Paper className={classes.root} elevation={4}>
